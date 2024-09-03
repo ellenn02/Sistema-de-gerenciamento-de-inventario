@@ -1,0 +1,38 @@
+# Sistema de Gerenciamento de Inventário
+
+## Descrição
+
+O Sistema de Gerenciamento de Inventário é uma aplicação para gerenciar um armazém, incluindo categorias de produtos, fornecedores e produtos em estoque. O sistema permite a adição, atualização, exclusão e consulta de dados relacionados aos produtos e seus fornecedores.
+
+## Estrutura do Banco de Dados
+
+O banco de dados `InventarioArmazem` contém três tabelas principais:
+
+1. **Categorias**: Armazena informações sobre categorias de produtos.
+   - `CategoriaID` (INT): Identificador único da categoria.
+   - `Nome` (VARCHAR): Nome da categoria.
+
+2. **Fornecedores**: Armazena informações sobre os fornecedores.
+   - `FornecedorID` (INT): Identificador único do fornecedor.
+   - `Nome` (VARCHAR): Nome do fornecedor.
+   - `Contato` (VARCHAR): Informações de contato do fornecedor.
+   - `Endereco` (TEXT): Endereço do fornecedor.
+
+3. **Produtos**: Armazena informações sobre produtos disponíveis no inventário.
+   - `ProdutoID` (INT): Identificador único do produto.
+   - `Descricao` (TEXT): Descrição do produto.
+   - `Preco` (DECIMAL): Preço do produto.
+   - `QuantidadeEmEstoque` (INT): Quantidade disponível em estoque.
+   - `CategoriaID` (INT): Identificador da categoria a qual o produto pertence (chave estrangeira).
+
+## Instalação
+
+1. **Criação do Banco de Dados**: Execute o script SQL fornecido para criar o banco de dados e as tabelas necessárias.
+
+2. **Inserção de Dados**: Após criar as tabelas, insira dados de exemplo usando os comandos `INSERT INTO` fornecidos no script SQL.
+
+## Consultas Exemplares
+
+- **Lista todos os produtos disponíveis em estoque**:
+  ```sql
+  SELECT * FROM Produtos;
