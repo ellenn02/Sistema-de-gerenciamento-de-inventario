@@ -1,0 +1,100 @@
+-- 1. Criar o Banco de Dados
+DROP DATABASE IF EXISTS InventarioArmazem;
+CREATE DATABASE InventarioArmazem;
+
+-- Usar o banco de dados criado
+USE InventarioArmazem;
+
+-- 2. Criar as Tabelas
+
+-- Tabela de Categorias
+CREATE TABLE Categorias (
+    CategoriaID INT PRIMARY KEY AUTO_INCREMENT,
+    Nome VARCHAR(50) NOT NULL
+);
+
+-- Tabela de Fornecedores
+CREATE TABLE Fornecedores (
+    FornecedorID INT PRIMARY KEY AUTO_INCREMENT,
+    Nome VARCHAR(100) NOT NULL,
+    Contato VARCHAR(50),
+    Endereco TEXT
+);
+
+-- Tabela de Produtos
+CREATE TABLE Produtos (
+    ProdutoID INT PRIMARY KEY AUTO_INCREMENT,
+    Descricao TEXT NOT NULL,
+    Preco DECIMAL(10, 2) NOT NULL,
+    QuantidadeEmEstoque INT NOT NULL,
+    CategoriaID INT,
+    FOREIGN KEY (CategoriaID) REFERENCES Categorias(CategoriaID) ON DELETE SET NULL
+);
+
+-- 3. Inserir Dados
+
+-- Adicionar Categorias
+INSERT INTO Categorias (Nome) VALUES
+('Eletrônicos'),
+('Roupas'),
+('Alimentos');
+
+-- Adicionar Fornecedores
+INSERT INTO Fornecedores (Nome, Contato, Endereco) VALUES
+('Fornecedor A', '1234-5678', 'Rua A, 123'),
+('Fornecedor B', '2345-6789', 'Rua B, 456'),
+('Fornecedor C', '3456-7890', 'Rua C, 789');
+
+-- Adicionar Produtos
+INSERT INTO Produtos (Descricao, Preco, QuantidadeEmEstoque, CategoriaID) VALUES
+('Televisão 50"', 2500.00, 10, 1),
+('Camiseta Polo', 80.00, 50, 2),
+('Arroz 5kg', 25.00, 100, 3),
+('Notebook', 4500.00, 5, 1),
+('Jaqueta de Couro', 350.00, 20, 2);
+
+-- 4. Consultar Dados
+
+-- Lista todos os produtos disponíveis em estoque
+SELECT * FROM Produtos;
+
+-- Mostra todos os produtos que pertencem a uma categoria específica (por exemplo, Eletrônicos)
+SELECT * FROM Produtos
+WHERE CategoriaID = (SELECT CategoriaID FROM Categorias WHERE Nome = 'Eletrônicos');
+
+-- Exibe informações sobre os fornecedores que fornecem produtos acima de um determinado preço (por exemplo, 100.00)
+SELECT DISTINCT F.Nome, F.Contato, F.Endereco
+FROM Fornecedores F
+JOIN Produtos P ON P.CategoriaID IS NOT NULL
+WHERE P.Preco > 100.00;
+
+-- 5. Atualizar Dados
+
+-- Atualiza o preço de um produto específico (por exemplo, Televisão 50")
+UPDATE Produtos
+SET Preco = 2700.00
+WHERE Descricao = 'Televisão 50"';
+
+-- Modifica a descrição de uma categoria existente (por exemplo, Roupas)
+UPDATE Categorias
+SET Nome = 'Vestuário'
+WHERE Nome = 'Roupas';
+
+-- Altera o endereço de um fornecedor específico (por exemplo, Fornecedor A)
+UPDATE Fornecedores
+SET Endereco = 'Rua Nova, 100'
+WHERE Nome = 'Fornecedor A';
+
+-- 6. Deletar Dados
+
+-- Remove um produto do inventário (por exemplo, Jaqueta de Couro)
+DELETE FROM Produtos
+WHERE Descricao = 'Jaqueta de Couro';
+
+-- Exclui uma categoria, garantindo que os produtos associados sejam atualizados ou removidos conforme necessário
+DELETE FROM Categorias
+WHERE Nome = 'Vestuário';
+
+-- Apaga um fornecedor, verificando se não há produtos ainda associados a ele
+DELETE FROM Fornecedores
+WHERE Nome = 'Fornecedor C';
